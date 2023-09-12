@@ -30,6 +30,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Sign-in With Ethereum Real-time Chat</title>
+</svelte:head>
+
 <div class="full-height">
 	<Nav />
 
