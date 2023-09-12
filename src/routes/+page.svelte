@@ -47,26 +47,34 @@
 </script>
 
 {#if $connected}
-	<h1>You are connected with {$signerAddress}</h1>
+	<h1 class="truncate">You are connected with {$signerAddress}</h1>
 	<div
-		class="py-8 border border-gray-300 my-8 px-8 rounded-md grow flex flex-col justify-end gap-4"
+		class="sm:border sm:border-gray-300 my-8 sm:p-6 rounded-md grow flex flex-col justify-end gap-4"
 	>
 		{#each history as msg}
-			<div
-				class={`${
-					msg.uid === $signerAddress ? 'self-end bg-blue-500' : 'self-start bg-gray-200'
-				} rounded-md py-2 px-3`}
-			>
-				<h2 class={`${msg.uid === $signerAddress ? 'text-blue-200' : 'text-gray-500'} text-sm`}>
-					{msg.uid}
-				</h2>
+			<div class="flex flex-col">
 				<div
-					class={`rounded-md  mt-px ${
-						msg.uid === $signerAddress ? 'text-end text-blue-50' : 'text-start text-gray-900'
-					}`}
-					title={formatDistanceToNow(Number(msg.timestamp), { addSuffix: true })}
+					class={`${
+						msg.uid === $signerAddress
+							? 'self-end bg-blue-500 items-end'
+							: 'self-start bg-gray-200 items-start'
+					} rounded-md py-2 px-3 flex flex-col w-fit max-w-[60%] overflow-hidden`}
 				>
-					{msg.message}
+					<h2
+						class={`${
+							msg.uid === $signerAddress ? 'text-blue-200 ' : 'text-gray-500'
+						} text-sm max-w-full truncate`}
+					>
+						{msg.uid}
+					</h2>
+					<p
+						class={`rounded-md mt-px ${
+							msg.uid === $signerAddress ? 'text-blue-50' : 'text-gray-900'
+						}`}
+						title={formatDistanceToNow(Number(msg.timestamp), { addSuffix: true })}
+					>
+						{msg.message}
+					</p>
 				</div>
 			</div>
 		{/each}
