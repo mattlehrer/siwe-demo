@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { connected, signerAddress } from '$lib/wagmi';
 	import { database as db, auth } from '$lib/firebase';
-	import { ref, push, child, update } from 'firebase/database';
+	import { ref, push, child, update, onValue } from 'firebase/database';
 	import { user } from '$lib/user';
+	import { onMount } from 'svelte';
 
 	let message = '';
+	let history = [];
 
 	async function handleSubmit() {
 		console.log({ user: auth.currentUser });
@@ -24,6 +26,13 @@
 		message = '';
 		return update(ref(db), updates);
 	}
+
+	onMount(() => {
+		onValue(child(ref(db), 'messages/' + $user?.uid), (snapshot) => {
+			history = snapshot.val();
+			console.log({ history });
+		});
+	});
 </script>
 
 {#if $connected}
