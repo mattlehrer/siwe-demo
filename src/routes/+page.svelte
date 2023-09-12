@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { connected, signerAddress } from '$lib/wagmi';
-	import { database as db, auth } from '$lib/firebase';
+	import { database as db } from '$lib/firebase';
 	import { ref, push, child, update, onValue } from 'firebase/database';
 	import { user } from '$lib/user';
 	import { onMount } from 'svelte';
+	import { formatDistanceToNow } from 'date-fns';
 
 	let message = '';
-	let history = [];
+	let history: Array<{
+		uid: string;
+		message: string;
+		timestamp: number;
+	}> = [];
 
 	async function handleSubmit() {
-		console.log({ user: auth.currentUser });
-		console.log({ message });
 		const msgData = {
 			uid: $signerAddress,
 			message,
@@ -28,17 +31,45 @@
 	}
 
 	onMount(() => {
-		onValue(child(ref(db), 'messages/' + $user?.uid), (snapshot) => {
-			history = snapshot.val();
-			console.log({ history });
+		const msgRef = ref(db, '/messages');
+		const unsub = onValue(msgRef, (snapshot) => {
+			const msgs = snapshot.val();
+			console.log({ msgs });
+			if (msgs) {
+				history = Object.values(msgs)
+					.flatMap((addr: any) => Object.values(addr))
+					.sort((a: any, b: any) => a.timestamp - b.timestamp) as any;
+			}
 		});
+
+		return unsub;
 	});
 </script>
 
 {#if $connected}
 	<h1>You are connected with {$signerAddress}</h1>
-	<div class="py-8 border border-gray-300 my-8 px-4 rounded-md grow flex flex-col justify-end">
-		<p>chats placeholder</p>
+	<div
+		class="py-8 border border-gray-300 my-8 px-8 rounded-md grow flex flex-col justify-end gap-4"
+	>
+		{#each history as msg}
+			<div
+				class={`${
+					msg.uid === $signerAddress ? 'self-end bg-blue-500' : 'self-start bg-gray-200'
+				} rounded-md py-2 px-3`}
+			>
+				<h2 class={`${msg.uid === $signerAddress ? 'text-blue-200' : 'text-gray-500'} text-sm`}>
+					{msg.uid}
+				</h2>
+				<div
+					class={`rounded-md  mt-px ${
+						msg.uid === $signerAddress ? 'text-end text-blue-50' : 'text-start text-gray-900'
+					}`}
+					title={formatDistanceToNow(Number(msg.timestamp), { addSuffix: true })}
+				>
+					{msg.message}
+				</div>
+			</div>
+		{/each}
 	</div>
 	<form
 		class="mt-auto my-8 py-4 flex justify-between gap-12"
