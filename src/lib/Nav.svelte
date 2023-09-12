@@ -21,7 +21,7 @@
 	});
 </script>
 
-<nav class="h-32 py-8">
+<nav class="h-32 py-4">
 	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 		<div class="relative flex h-16 items-center justify-between">
 			<div class="flex flex-1 items-stretch justify-start">
