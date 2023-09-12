@@ -48,28 +48,28 @@
 {#if $connected}
 	<h1 class="truncate">You are connected with {$signerAddress}</h1>
 	<div
-		class="sm:border sm:border-gray-300 my-8 sm:p-6 rounded-md grow flex flex-col justify-end gap-4"
+		class="my-8 flex grow flex-col justify-end gap-4 rounded-md sm:border sm:border-gray-300 sm:p-6"
 	>
 		{#each history as msg}
 			<div class="flex flex-col">
 				<div
 					class={`${
 						msg.uid === $signerAddress
-							? 'self-end bg-blue-500 items-end'
-							: 'self-start bg-gray-200 items-start'
-					} rounded-md py-2 px-3 flex flex-col w-fit max-w-[60%] overflow-hidden`}
+							? 'items-end self-end bg-blue-500'
+							: 'items-start self-start bg-gray-200'
+					} flex w-fit max-w-[60%] flex-col overflow-hidden rounded-md px-3 py-2`}
 				>
 					{#if msg.uid !== $signerAddress}
 						<h2
 							class={`${
 								msg.uid === $signerAddress ? 'text-blue-200' : 'text-gray-500'
-							} text-sm max-w-full truncate`}
+							} max-w-full truncate text-sm`}
 						>
 							{msg.uid}
 						</h2>
 					{/if}
 					<p
-						class={`rounded-md mt-px ${
+						class={`mt-px rounded-md ${
 							msg.uid === $signerAddress ? 'text-blue-50' : 'text-gray-900'
 						}`}
 						title={formatDistanceToNow(Number(msg.timestamp), { addSuffix: true })}
@@ -81,21 +81,39 @@
 		{/each}
 	</div>
 	<form
-		class="mt-auto my-8 py-4 flex justify-between gap-2 sm:gap-12"
+		class="my-8 mt-auto flex justify-between gap-2 py-4 sm:gap-12"
 		on:submit|preventDefault={handleSubmit}
 	>
 		<input
 			type="text"
 			bind:value={message}
-			class="block w-full rounded-md border sm:border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3 sm:px-4"
+			class="block w-full rounded-md border px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:border-0 sm:px-4 sm:text-sm sm:leading-6"
 			placeholder="Send a message"
 		/>
 		<button
 			type="submit"
-			class="rounded-md bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-100 border-blue-500 border"
+			class="rounded-md border border-blue-500 bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-100"
 			>Submit</button
 		>
 	</form>
 {:else}
-	<h1>You are not connected</h1>
+	<h1>It's time to try out an Ethereum wallet and Sign-In with Ethereum.</h1>
+	<p>
+		If you don't have one yet, the easiest ways to get started are to use the <a
+			href="https://rainbow.me/">Rainbow mobile app</a
+		>
+		or the <a href="https://metamask.io/">Metamask desktop browser extension</a>.
+	</p>
+	<p>After you have a wallet, you can connect to this site and start chatting.</p>
+	<p>
+		You can use the same Ethereum account on multiple browsers or on a laptop and phone. Or you
+		could try creating multiple wallets and switching between them. That is easiest on desktop with
+		Metamask.
+	</p>
 {/if}
+
+<style>
+	h1 {
+		@apply my-4 text-3xl font-semibold;
+	}
+</style>

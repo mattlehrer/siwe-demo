@@ -19,15 +19,21 @@
 
 		await erckit.init();
 	});
+
+	async function connect() {
+		$loading = true;
+		await $web3Modal.openModal();
+		$loading = false;
+	}
 </script>
 
 <nav class="h-32 py-4">
 	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 		<div class="relative flex h-16 items-center justify-between">
 			<div class="flex flex-1 items-stretch justify-start">
-				<div class="flex flex-shrink-0 items-center">
-					<p class="hidden text-gray-700 sm:block">Sign-in with Ethereum Chat Demo</p>
-					<p class="text-gray-700 sm:hidden">SIWE Chat Demo</p>
+				<div class="flex flex-shrink-0 items-center font-bold">
+					<a href="/" class="hidden text-gray-700 sm:block">Sign-in with Ethereum Chat Demo</a>
+					<a href="/" class="text-gray-700 sm:hidden">SIWE Chat Demo</a>
 				</div>
 			</div>
 			<div
@@ -47,11 +53,7 @@
 						>
 					{:else}
 						<button
-							on:click={async () => {
-								$loading = true;
-								await $web3Modal.openModal();
-								$loading = false;
-							}}
+							on:click={connect}
 							type="button"
 							class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 							>{#if $loading}

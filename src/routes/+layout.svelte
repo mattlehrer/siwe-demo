@@ -5,6 +5,7 @@
 	import { signerAddress } from '$lib/wagmi';
 	import { auth } from '$lib/firebase';
 	import { user } from '$lib/user';
+	import Footer from '$lib/Footer.svelte';
 
 	$: if ($signerAddress) {
 		fetch('/api/token', {
@@ -40,6 +41,8 @@
 	<div class="almost mx-auto flex max-w-7xl flex-col px-2 sm:px-6 lg:px-8">
 		<slot />
 	</div>
+
+	<Footer />
 </div>
 
 <style>
@@ -48,6 +51,6 @@
 	}
 
 	.almost {
-		min-height: calc(100dvh - 8rem);
+		min-height: calc(100dvh - 16rem);
 	}
 </style>
