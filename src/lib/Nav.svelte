@@ -26,7 +26,8 @@
 		<div class="relative flex h-16 items-center justify-between">
 			<div class="flex flex-1 items-stretch justify-start">
 				<div class="flex flex-shrink-0 items-center">
-					<p class="text-gray-700">SIWE Demo</p>
+					<p class="text-gray-700 hidden sm:block">Sign-in with Ethereum Chat Demo</p>
+					<p class="text-gray-700 sm:hidden">SIWE Chat Demo</p>
 				</div>
 			</div>
 			<div
