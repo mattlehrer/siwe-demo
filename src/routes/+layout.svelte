@@ -7,7 +7,7 @@
 	import { user } from '$lib/user';
 
 	$: if ($signerAddress) {
-		const token = fetch('/api/token', {
+		fetch('/api/token', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -15,19 +15,18 @@
 			body: JSON.stringify({ address: $signerAddress })
 		})
 			.then((res) => res.json())
-			.then((res) => res.customToken);
-		console.log({ token });
-
-		// signInWithCustomToken(auth, $signerAddress)
-		// 	.then((userCredential) => {
-		// 		// Signed in
-		// 		$user = userCredential.user;
-		// 		console.log('here', $user);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.error(error);
-		// 		$user = null;
-		// 	});
+			.then((body) => {
+				const { customToken } = body;
+				signInWithCustomToken(auth, customToken)
+					.then((userCredential) => {
+						// Signed in
+						$user = userCredential.user;
+					})
+					.catch((error) => {
+						console.error(error);
+						$user = null;
+					});
+			});
 	}
 </script>
 
