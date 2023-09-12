@@ -34,7 +34,6 @@
 		const msgRef = ref(db, '/messages');
 		const unsub = onValue(msgRef, (snapshot) => {
 			const msgs = snapshot.val();
-			console.log({ msgs });
 			if (msgs) {
 				history = Object.values(msgs)
 					.flatMap((addr: any) => Object.values(addr))
@@ -60,13 +59,15 @@
 							: 'self-start bg-gray-200 items-start'
 					} rounded-md py-2 px-3 flex flex-col w-fit max-w-[60%] overflow-hidden`}
 				>
-					<h2
-						class={`${
-							msg.uid === $signerAddress ? 'text-blue-200 ' : 'text-gray-500'
-						} text-sm max-w-full truncate`}
-					>
-						{msg.uid}
-					</h2>
+					{#if msg.uid !== $signerAddress}
+						<h2
+							class={`${
+								msg.uid === $signerAddress ? 'text-blue-200' : 'text-gray-500'
+							} text-sm max-w-full truncate`}
+						>
+							{msg.uid}
+						</h2>
+					{/if}
 					<p
 						class={`rounded-md mt-px ${
 							msg.uid === $signerAddress ? 'text-blue-50' : 'text-gray-900'
@@ -80,18 +81,18 @@
 		{/each}
 	</div>
 	<form
-		class="mt-auto my-8 py-4 flex justify-between gap-12"
+		class="mt-auto my-8 py-4 flex justify-between gap-2 sm:gap-12"
 		on:submit|preventDefault={handleSubmit}
 	>
 		<input
 			type="text"
 			bind:value={message}
-			class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-4"
+			class="block w-full rounded-md border sm:border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3 sm:px-4"
 			placeholder="Send a message"
 		/>
 		<button
 			type="submit"
-			class="rounded-md bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-600 shadow-sm hover:bg-blue-100"
+			class="rounded-md bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-100 border-blue-500 border"
 			>Submit</button
 		>
 	</form>
