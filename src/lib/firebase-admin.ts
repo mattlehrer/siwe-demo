@@ -16,9 +16,20 @@ const credential = {
 	universe_domain: 'googleapis.com'
 } as admin.ServiceAccount;
 
-if (!admin.app())
+try {
 	admin.initializeApp({
 		credential: admin.credential.cert(credential)
 	});
+} catch (error: any) {
+	if (error.code === 'app/duplicate-app') {
+		console.log('Firebase Admin already initialized');
+	} else if (error.code === 'app/no-app') {
+		admin.initializeApp({
+			credential: admin.credential.cert(credential)
+		});
+	} else {
+		console.log('Error initializing Firebase Admin:', error);
+	}
+}
 
 export const auth = admin.auth;

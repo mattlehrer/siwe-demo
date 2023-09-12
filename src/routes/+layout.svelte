@@ -30,8 +30,20 @@
 	}
 </script>
 
-<Nav />
+<div class="full-height">
+	<Nav />
 
-<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-	<slot />
+	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 almost flex flex-col">
+		<slot />
+	</div>
 </div>
+
+<style>
+	.full-height {
+		min-height: 100vh;
+	}
+
+	.almost {
+		min-height: calc(100vh - 8rem);
+	}
+</style>

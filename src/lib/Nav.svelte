@@ -21,7 +21,7 @@
 	});
 </script>
 
-<nav class="py-4">
+<nav class="h-32 py-8">
 	<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 		<div class="relative flex h-16 items-center justify-between">
 			<div class="flex flex-1 items-stretch justify-start">
@@ -41,7 +41,7 @@
 						<button
 							on:click={disconnectWagmi}
 							type="button"
-							class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+							class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50"
 							>Disconnect</button
 						>
 					{:else}
