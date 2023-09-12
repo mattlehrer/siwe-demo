@@ -44,10 +44,10 @@
 
 <style>
 	.full-height {
-		min-height: 100vh;
+		min-height: 100dvh;
 	}
 
 	.almost {
-		min-height: calc(100vh - 8rem);
+		min-height: calc(100dvh - 8rem);
 	}
 </style>
