@@ -13,19 +13,19 @@ const credential = {
 	auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
 	client_x509_cert_url:
 		'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-lgp30%40siwe-demo-mau.iam.gserviceaccount.com',
-	universe_domain: 'googleapis.com'
+	universe_domain: 'googleapis.com',
 } as admin.ServiceAccount;
 
 try {
 	admin.initializeApp({
-		credential: admin.credential.cert(credential)
+		credential: admin.credential.cert(credential),
 	});
 } catch (error: any) {
 	if (error.code === 'app/duplicate-app') {
 		console.log('Firebase Admin already initialized');
 	} else if (error.code === 'app/no-app') {
 		admin.initializeApp({
-			credential: admin.credential.cert(credential)
+			credential: admin.credential.cert(credential),
 		});
 	} else {
 		console.log('Error initializing Firebase Admin:', error);

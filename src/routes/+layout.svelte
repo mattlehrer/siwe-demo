@@ -10,9 +10,9 @@
 		fetch('/api/token', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ address: $signerAddress })
+			body: JSON.stringify({ address: $signerAddress }),
 		})
 			.then((res) => res.json())
 			.then((body) => {

@@ -10,7 +10,7 @@ import {
 	watchNetwork,
 	Connector,
 	type GetAccountResult,
-	type GetNetworkResult
+	type GetNetworkResult,
 } from '@wagmi/core';
 import { mainnet, polygon, optimism, arbitrum, type Chain } from '@wagmi/core/chains';
 import { publicProvider } from '@wagmi/core/providers/public';
@@ -73,7 +73,7 @@ const getDefaultConnectors = ({
 	chains,
 	app,
 	walletConnectProjectId,
-	alchemyId
+	alchemyId,
 }: DefaultConnectorsProps) => {
 	const hasAllAppData = app.name && app.icon && app.description && app.url;
 	let defaultConnectors: any[] = [];
@@ -84,8 +84,8 @@ const getDefaultConnectors = ({
 			options: {
 				appName: app.name,
 				headlessMode: false,
-				jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${alchemyId}`
-			}
+				jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${alchemyId}`,
+			},
 		}),
 		new WalletConnectConnector({
 			chains,
@@ -97,18 +97,18 @@ const getDefaultConnectors = ({
 							name: app.name,
 							description: app.description!,
 							url: app.url!,
-							icons: [app.icon!]
+							icons: [app.icon!],
 					  }
-					: undefined
-			}
+					: undefined,
+			},
 		}),
 		new InjectedConnector({
 			chains,
 			options: {
 				name: (detectedName) =>
-					`Injected (${typeof detectedName === 'string' ? detectedName : detectedName.join(', ')})`
-			}
-		})
+					`Injected (${typeof detectedName === 'string' ? detectedName : detectedName.join(', ')})`,
+			},
+		}),
 	];
 
 	configuredConnectors.set(defaultConnectors);
@@ -133,16 +133,16 @@ export const configureWagmi = async (options: IOptions = {}) => {
 				chains,
 				options: {
 					projectId: options.walletconnectProjectID,
-					showQrModal: false
-				}
-			})
+					showQrModal: false,
+				},
+			}),
 		);
 
 	const wagmiClient = createConfig({
 		autoConnect: options.autoConnect ?? true,
 		webSocketPublicClient,
 		publicClient,
-		connectors
+		connectors,
 	});
 
 	if (options.walletconnect && options.walletconnectProjectID) {
@@ -168,7 +168,7 @@ export const defaultConfig = ({
 	connectors,
 	publicClient,
 	stallTimeout,
-	walletConnectProjectId
+	walletConnectProjectId,
 }: DefaultConfigProps) => {
 	const providers = [];
 	if (alchemyId) {
@@ -181,15 +181,15 @@ export const defaultConfig = ({
 		jsonRpcProvider({
 			rpc: (c) => {
 				return { http: c.rpcUrls.default.http[0] };
-			}
-		})
+			},
+		}),
 	);
 
 	providers.push(publicProvider());
 	const {
 		publicClient: configuredPublicClient,
 		chains: configuredChains,
-		webSocketPublicClient: configuredWebSocketPublicClient
+		webSocketPublicClient: configuredWebSocketPublicClient,
 	} = configureChains(chains, providers, { stallTimeout });
 
 	if (connectors) configuredConnectors.set(connectors);
@@ -206,11 +206,11 @@ export const defaultConfig = ({
 					name: appName,
 					icon: appIcon,
 					description: appDescription,
-					url: appUrl
+					url: appUrl,
 				},
 				walletConnectProjectId,
-				alchemyId
-			})
+				alchemyId,
+			}),
 	});
 
 	const ethereumClient = new EthereumClient(ercClient, configuredChains);
@@ -267,7 +267,7 @@ export const connection = async () => {
 		const connector = getConnectorbyID('injected');
 		if (connector !== null) {
 			await connect({
-				connector
+				connector,
 			});
 		}
 		return { success: true };

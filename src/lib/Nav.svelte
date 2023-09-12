@@ -5,7 +5,7 @@
 		loading,
 		web3Modal,
 		defaultConfig,
-		wagmiLoaded
+		wagmiLoaded,
 	} from '$lib/wagmi';
 	import { onMount } from 'svelte';
 	import { PUBLIC_WALLETCONNECT_ID, PUBLIC_ALCHEMY_ID } from '$env/static/public';
@@ -14,7 +14,7 @@
 		const erckit = defaultConfig({
 			appName: 'erc.kit',
 			walletConnectProjectId: PUBLIC_WALLETCONNECT_ID,
-			alchemyId: PUBLIC_ALCHEMY_ID
+			alchemyId: PUBLIC_ALCHEMY_ID,
 		});
 
 		await erckit.init();

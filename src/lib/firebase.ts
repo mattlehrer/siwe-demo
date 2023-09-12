@@ -13,7 +13,7 @@ const firebaseConfig = {
 	projectId: 'siwe-demo-mau',
 	storageBucket: 'siwe-demo-mau.appspot.com',
 	messagingSenderId: '471949763676',
-	appId: '1:471949763676:web:40c3d686817ddf116a7299'
+	appId: '1:471949763676:web:40c3d686817ddf116a7299',
 };
 
 // Initialize Firebase
