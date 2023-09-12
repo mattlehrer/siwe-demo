@@ -16,12 +16,14 @@ import { mainnet, polygon, optimism, arbitrum, type Chain } from '@wagmi/core/ch
 import { publicProvider } from '@wagmi/core/providers/public';
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
 import { InjectedConnector } from '@wagmi/core/connectors/injected';
-import { EthereumClient, w3mProvider } from '@web3modal/ethereum';
+import { EthereumClient } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/html';
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect';
 import { infuraProvider } from '@wagmi/core/providers/infura';
 import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc';
 import { CoinbaseWalletConnector } from '@wagmi/core/connectors/coinbaseWallet';
+import { user } from './user';
+import { auth } from './firebase';
 
 export const connected = writable<boolean>(false);
 export const wagmiLoaded = writable<boolean>(false);
@@ -113,47 +115,6 @@ const getDefaultConnectors = ({
 
 	configuredConnectors.set(defaultConnectors);
 	return defaultConnectors;
-};
-
-/** Deprecated **/
-export const configureWagmi = async (options: IOptions = {}) => {
-	const providers: any = [publicProvider()];
-	if (options.alchemyKey) providers.push(alchemyProvider({ apiKey: options.alchemyKey }));
-
-	if (options.walletconnectProjectID)
-		providers.push(w3mProvider({ projectId: options.walletconnectProjectID }));
-
-	const { chains, publicClient, webSocketPublicClient } = configureChains(defaultChains, providers);
-
-	const connectors: any = [new InjectedConnector({ chains })];
-
-	if (options.walletconnect && options.walletconnectProjectID)
-		connectors.push(
-			new WalletConnectConnector({
-				chains,
-				options: {
-					projectId: options.walletconnectProjectID,
-					showQrModal: false,
-				},
-			}),
-		);
-
-	const wagmiClient = createConfig({
-		autoConnect: options.autoConnect ?? true,
-		webSocketPublicClient,
-		publicClient,
-		connectors,
-	});
-
-	if (options.walletconnect && options.walletconnectProjectID) {
-		const ethereumClient = new EthereumClient(wagmiClient, chains);
-		const modal = new Web3Modal({ projectId: options.walletconnectProjectID }, ethereumClient);
-
-		web3Modal.set(modal);
-	}
-
-	wagmiLoaded.set(true);
-	await init();
 };
 
 export const defaultConfig = ({
@@ -292,6 +253,8 @@ export const disconnectWagmi = async () => {
 	connected.set(false);
 	chainId.set(null);
 	signerAddress.set(null);
+	user.set(null);
+	auth.signOut();
 	loading.set(false);
 };
 
