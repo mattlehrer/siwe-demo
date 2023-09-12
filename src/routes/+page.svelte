@@ -104,7 +104,10 @@
 		>
 		or the <a href="https://metamask.io/">Metamask desktop browser extension</a>.
 	</p>
-	<p>After you have a wallet, you can connect to this site and start chatting.</p>
+	<p>
+		After you have a wallet, you can connect to this site and start chatting. You will be identified
+		only by the public wallet address you connect with.
+	</p>
 	<p>
 		You can use the same Ethereum account on multiple browsers or on a laptop and phone. Or you
 		could try creating multiple wallets and switching between them. That is easiest on desktop with
