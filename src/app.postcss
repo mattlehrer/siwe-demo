@@ -13,9 +13,11 @@ p {
 	@apply my-2 max-w-prose text-lg text-gray-700;
 }
 
-p > a {
+p > a,
+li > a {
 	@apply text-blue-500 underline;
 }
-p > a:hover {
+p > a:hover,
+li > a:hover {
 	@apply text-blue-800;
 }

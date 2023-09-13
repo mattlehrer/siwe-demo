@@ -99,7 +99,7 @@
 		>
 	</form>
 {:else}
-	<h1>It's time to try out an Ethereum wallet and Sign-In with Ethereum.</h1>
+	<h1>Try out an Ethereum wallet and Sign-In with Ethereum.</h1>
 	<p>
 		If you don't have one yet, the easiest ways to get started are to use the <a
 			href="https://rainbow.me/">Rainbow mobile app</a
@@ -111,9 +111,14 @@
 		only by the public wallet address you connect with.
 	</p>
 	<p>
-		You can use the same Ethereum account on multiple browsers or on a laptop and phone. Or you
-		could try creating multiple wallets and switching between them. That is easiest on desktop with
-		Metamask.
+		You can use the same Ethereum account on multiple browsers or on a laptop and phone. You could
+		try creating multiple wallets and switching between them. Creating multiple wallets can be done
+		in any of these applications though it is easiest on desktop with Metamask.
+	</p>
+	<p>
+		This site is just a demo of Sign-in with Ethereum. The messages are not sent to the blockchain.
+		The wallet and your Ethereum account are only used for authentication. No personal information
+		is collected or stored in any way.
 	</p>
 {/if}
 
