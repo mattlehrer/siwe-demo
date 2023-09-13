@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { connected, signerAddress } from '$lib/wagmi';
-	import { database as db } from '$lib/firebase';
+	import { auth, database as db } from '$lib/firebase';
 	import { ref, push, child, update, onValue } from 'firebase/database';
+	import { onAuthStateChanged } from 'firebase/auth';
 	import { user } from '$lib/user';
 	import { onMount } from 'svelte';
 	import { formatDistanceToNow } from 'date-fns';
@@ -12,6 +13,7 @@
 		message: string;
 		timestamp: number;
 	}> = [];
+	let unsub: () => void;
 
 	async function handleSubmit() {
 		const msgData = {
@@ -30,17 +32,30 @@
 		return update(ref(db), updates);
 	}
 
-	onMount(() => {
+	onAuthStateChanged(auth, (user) => {
 		const msgRef = ref(db, '/messages');
-		const unsub = onValue(msgRef, (snapshot) => {
-			const msgs = snapshot.val();
-			if (msgs) {
-				history = Object.values(msgs)
-					.flatMap((addr: any) => Object.values(addr))
-					.sort((a: any, b: any) => a.timestamp - b.timestamp) as any;
-			}
-		});
+		if (user) {
+			unsub = onValue(
+				msgRef,
+				(snapshot) => {
+					const msgs = snapshot.val();
+					if (msgs) {
+						history = Object.values(msgs)
+							.flatMap((addr: any) => Object.values(addr))
+							.sort((a: any, b: any) => a.timestamp - b.timestamp) as any;
+					}
+				},
+				(error: Error) => {
+					console.error(error);
+					history = [];
+				},
+			);
+		} else {
+			history = [];
+		}
+	});
 
+	onMount(() => {
 		return unsub;
 	});
 </script>
