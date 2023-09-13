@@ -249,12 +249,12 @@ export const WC = async () => {
 };
 
 export const disconnectWagmi = async () => {
-	await disconnect();
 	connected.set(false);
 	chainId.set(null);
 	signerAddress.set(null);
 	user.set(null);
 	auth.signOut();
+	await disconnect();
 	loading.set(false);
 };
 
