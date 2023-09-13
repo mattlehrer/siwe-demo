@@ -46,7 +46,9 @@
 </script>
 
 {#if $connected}
-	<h1 class="truncate">You are connected with {$signerAddress}</h1>
+	<h2 class="truncate text-lg sm:text-2xl">
+		You are connected with <br class="block sm:hidden" />{$signerAddress}
+	</h2>
 	<div
 		class="my-8 flex grow flex-col justify-end gap-4 rounded-md sm:border sm:border-gray-300 sm:p-6"
 	>
@@ -81,7 +83,7 @@
 		{/each}
 	</div>
 	<form
-		class="my-8 mt-auto flex justify-between gap-2 py-4 sm:gap-12"
+		class="mt-auto flex justify-between gap-2 py-4 sm:gap-12"
 		on:submit|preventDefault={handleSubmit}
 	>
 		<input
