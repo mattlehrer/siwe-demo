@@ -1,8 +1,8 @@
 <footer class="bg-white">
 	<div
-		class="mx-auto max-w-7xl px-6 py-12 text-sm text-gray-500 flex flex-col sm:flex-row gap-4 items-center md:justify-between lg:px-8"
+		class="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 py-12 text-sm text-gray-500 sm:flex-row sm:justify-around lg:px-8"
 	>
-		<div class="mt-8 md:mt-0 order-1">
+		<div class="order-1 mt-8 md:mt-0">
 			<a class="hover:text-gray-700" href="/about">About</a>
 		</div>
 
@@ -18,7 +18,7 @@
 				/>
 			</svg> in Malmö
 		</div>
-		<div class="flex justify-center space-x-6 order-2 sm:order-0 sm:order-3">
+		<div class="sm:order-0 order-2 flex justify-center space-x-6 sm:order-3">
 			<a href="https://github.com/mattlehrer/siwe-demo" class="hover:text-gray-700">
 				<span class="sr-only">GitHub</span>
 				<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
