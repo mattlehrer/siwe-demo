@@ -42,7 +42,8 @@
 					if (msgs) {
 						history = Object.values(msgs)
 							.flatMap((addr: any) => Object.values(addr))
-							.sort((a: any, b: any) => a.timestamp - b.timestamp) as any;
+							.sort((a: any, b: any) => a.timestamp - b.timestamp)
+							.slice(-20) as any;
 					}
 				},
 				(error: Error) => {
