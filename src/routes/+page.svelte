@@ -111,7 +111,7 @@
 						</h2>
 					{/if}
 					<p
-						class={`mt-px rounded-md ${
+						class={`rounded-md my-0 ${
 							msg.uid === $signerAddress ? 'text-blue-50' : 'text-gray-900'
 						}`}
 						title={formatDistanceToNow(Number(msg.timestamp), { addSuffix: true })}
