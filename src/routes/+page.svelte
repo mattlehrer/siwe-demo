@@ -1,57 +1,65 @@
 <script lang="ts">
 	import { connected, signerAddress } from '$lib/wagmi';
-	import { auth, database as db } from '$lib/firebase';
-	import { ref, push, child, update, onValue } from 'firebase/database';
+	import { auth, firestore as db } from '$lib/firebase';
+	import { collection, doc, setDoc, onSnapshot } from 'firebase/firestore';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { user } from '$lib/user';
 	import { onMount } from 'svelte';
 	import { formatDistanceToNow } from 'date-fns';
 
 	let message = '';
-	let history: Array<{
+	type Message = {
 		uid: string;
 		message: string;
 		timestamp: number;
-	}> = [];
+	};
+	let history: Array<Message> = [];
 	let unsub: () => void;
 
 	async function handleSubmit() {
+		if (!$user) {
+			throw new Error('User not signed in');
+		}
+
 		const msgData = {
 			uid: $signerAddress,
 			message,
 			timestamp: Date.now(),
 			expiresAt: Date.now() + 1000 * 60 * 60,
 		};
-		// // Get a key for a new Message.
-		const newMsgKey = push(child(ref(db), 'messages')).key;
-
-		const updates: Record<string, any> = {};
-		updates['/messages/' + $user?.uid + '/' + newMsgKey] = msgData;
+		try {
+			await setDoc(doc(db, 'messages', crypto.randomUUID()), msgData);
+		} catch (error) {
+			console.log('setDoc', { error });
+		}
 
 		message = '';
-		return update(ref(db), updates);
 	}
 
-	onAuthStateChanged(auth, (user) => {
-		const msgRef = ref(db, '/messages');
-		if (user) {
-			unsub = onValue(
-				msgRef,
-				(snapshot) => {
-					const msgs = snapshot.val();
-					if (msgs) {
-						history = Object.values(msgs)
-							.flatMap((addr: any) => Object.values(addr))
-							.sort((a: any, b: any) => a.timestamp - b.timestamp) as any;
-					}
-				},
-				(error: Error) => {
-					console.error(error);
-					history = [];
-				},
-			);
-		} else {
-			history = [];
+	onAuthStateChanged(auth, async (user) => {
+		try {
+			if (user) {
+				unsub = onSnapshot(
+					collection(db, 'messages'),
+					(querySnapshot) => {
+						history = [];
+						querySnapshot.forEach((doc) => {
+							const msg = doc.data();
+							history.push(msg as Message);
+							history.sort((a, b) => a.timestamp - b.timestamp);
+							history = history;
+						});
+					},
+					(error) => {
+						console.log('onSnapshot', { error });
+					},
+				);
+			} else {
+				history = [];
+				if (unsub && typeof unsub === 'function') unsub();
+			}
+		} catch (error) {
+			console.log('onSnapshot?', { error });
 		}
 	});
 
@@ -114,27 +122,29 @@
 		>
 	</form>
 {:else}
-	<h1>Try out an Ethereum wallet and Sign-In with Ethereum.</h1>
-	<p>
-		If you don't have one yet, the easiest ways to get started are to use the <a
-			href="https://rainbow.me/">Rainbow mobile app</a
-		>
-		or the <a href="https://metamask.io/">Metamask desktop browser extension</a>.
-	</p>
-	<p>
-		After you have a wallet, you can connect to this site and start chatting. You will be identified
-		only by the public wallet address you connect with.
-	</p>
-	<p>
-		You can use the same Ethereum account on multiple browsers or on a laptop and phone. You could
-		try creating multiple wallets and switching between them. Creating multiple wallets can be done
-		in any of these applications though it is easiest on desktop with Metamask.
-	</p>
-	<p>
-		This site is just a demo of Sign-in with Ethereum. The messages are not sent to the blockchain.
-		The wallet and your Ethereum account are only used for authentication. No personal information
-		is collected or stored in any way.
-	</p>
+	<div class="px-4">
+		<h1>Try out an Ethereum wallet and Sign-In with Ethereum.</h1>
+		<p>
+			If you don't have one yet, the easiest ways to get started are to use the <a
+				href="https://rainbow.me/">Rainbow mobile app</a
+			>
+			or the <a href="https://metamask.io/">Metamask desktop browser extension</a>.
+		</p>
+		<p>
+			After you have a wallet, you can connect to this site and start chatting. You will be
+			identified only by the public wallet address you connect with.
+		</p>
+		<p>
+			You can use the same Ethereum account on multiple browsers or on a laptop and phone. You could
+			try creating multiple wallets and switching between them. Creating multiple wallets can be
+			done in any of these applications though it is easiest on desktop with Metamask.
+		</p>
+		<p>
+			This site is just a demo of Sign-in with Ethereum. The messages are not sent to the
+			blockchain. The wallet and your Ethereum account are only used for authentication. No personal
+			information is collected or stored in any way.
+		</p>
+	</div>
 {/if}
 
 <style>

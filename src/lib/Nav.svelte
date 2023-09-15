@@ -7,6 +7,8 @@
 		defaultConfig,
 		wagmiLoaded,
 	} from '$lib/wagmi';
+	import { user } from './user';
+	import { auth } from './firebase';
 	import { onMount } from 'svelte';
 	import { PUBLIC_WALLETCONNECT_ID, PUBLIC_ALCHEMY_ID } from '$env/static/public';
 
@@ -25,6 +27,12 @@
 		await $web3Modal.openModal();
 		$loading = false;
 	}
+
+	async function disconnect() {
+		user.set(null);
+		await disconnectWagmi();
+		await auth.signOut();
+	}
 </script>
 
 <nav class="h-32 py-4">
@@ -33,7 +41,7 @@
 			<div class="flex flex-1 items-stretch justify-start">
 				<div class="flex flex-shrink-0 items-center font-bold">
 					<a href="/" class="hidden text-gray-700 sm:block">Sign-in with Ethereum Chat Demo</a>
-					<a href="/" class="text-gray-700 sm:hidden">SIWE Chat Demo</a>
+					<a href="/" class="pl-4 text-gray-700 sm:hidden">SIWE Chat Demo</a>
 				</div>
 			</div>
 			<div
@@ -46,7 +54,7 @@
 						</div>
 					{:else if $connected}
 						<button
-							on:click={disconnectWagmi}
+							on:click={disconnect}
 							type="button"
 							class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50"
 							>Disconnect</button
