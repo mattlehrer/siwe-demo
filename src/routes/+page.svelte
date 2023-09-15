@@ -1,7 +1,16 @@
 <script lang="ts">
 	import { connected, signerAddress } from '$lib/wagmi';
 	import { auth, firestore as db } from '$lib/firebase';
-	import { collection, doc, setDoc, onSnapshot } from 'firebase/firestore';
+	import {
+		collection,
+		doc,
+		setDoc,
+		onSnapshot,
+		Timestamp,
+		query,
+		orderBy,
+		where,
+	} from 'firebase/firestore';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { user } from '$lib/user';
 	import { onMount } from 'svelte';
@@ -13,6 +22,7 @@
 		uid: string;
 		message: string;
 		timestamp: number;
+		expiresAt: Timestamp;
 	};
 	let history: Array<Message> = [];
 	let unsub: () => void;
@@ -26,7 +36,7 @@
 			uid: $signerAddress,
 			message,
 			timestamp: Date.now(),
-			expiresAt: Date.now() + 1000 * 60 * 60,
+			expiresAt: Timestamp.fromMillis(Date.now() + 1000 * 60 * 60),
 		};
 		try {
 			await setDoc(doc(db, 'messages', uid()), msgData);
@@ -40,14 +50,20 @@
 	onAuthStateChanged(auth, async (user) => {
 		try {
 			if (user) {
-				unsub = onSnapshot(
+				const q = query(
 					collection(db, 'messages'),
+					where('expiresAt', '>', Timestamp.now()),
+					orderBy('expiresAt'),
+				);
+				unsub = onSnapshot(
+					q,
 					(querySnapshot) => {
 						history = [];
 						querySnapshot.forEach((doc) => {
 							const msg = doc.data();
 							history.push(msg as Message);
-							history.sort((a, b) => a.timestamp - b.timestamp);
+							// unneeded because of orderBy and assumption that expiresAt is the same order as timestamp
+							// history.sort((a, b) => a.timestamp - b.timestamp);
 							history = history;
 						});
 					},
