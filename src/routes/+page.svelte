@@ -6,6 +6,7 @@
 	import { user } from '$lib/user';
 	import { onMount } from 'svelte';
 	import { formatDistanceToNow } from 'date-fns';
+	import { uid } from 'uid';
 
 	let message = '';
 	type Message = {
@@ -28,7 +29,7 @@
 			expiresAt: Date.now() + 1000 * 60 * 60,
 		};
 		try {
-			await setDoc(doc(db, 'messages', crypto.randomUUID()), msgData);
+			await setDoc(doc(db, 'messages', uid()), msgData);
 		} catch (error) {
 			console.log('setDoc', { error });
 		}
