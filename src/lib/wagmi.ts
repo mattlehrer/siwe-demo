@@ -22,8 +22,6 @@ import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect';
 import { infuraProvider } from '@wagmi/core/providers/infura';
 import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc';
 import { CoinbaseWalletConnector } from '@wagmi/core/connectors/coinbaseWallet';
-import { user } from './user';
-import { auth } from './firebase';
 
 export const connected = writable<boolean>(false);
 export const wagmiLoaded = writable<boolean>(false);
@@ -252,8 +250,6 @@ export const disconnectWagmi = async () => {
 	connected.set(false);
 	chainId.set(null);
 	signerAddress.set(null);
-	user.set(null);
-	auth.signOut();
 	await disconnect();
 	loading.set(false);
 };
